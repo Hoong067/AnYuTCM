@@ -1247,7 +1247,24 @@
             </div>
             <div class="form-group"><label>Contact Phone</label><input type="text" value="+60 3-6250 1234"></div>
             <div class="form-group"><label>Email</label><input type="email" value="kepong@anyutcm.com.my"></div>
-            <button class="btn btn-primary" onclick="showToast('✅ Settings saved!')">Save Changes</button>
+
+            <!-- Mobile View Toggle -->
+            <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--cream-dark);">
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <div>
+                  <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px;">Mobile View Mode</div>
+                  <div style="font-size:12px;color:var(--text-light);">Switch homepage to mobile-optimised layout</div>
+                </div>
+                <label style="position:relative;display:inline-block;width:48px;height:26px;cursor:pointer;">
+                  <input type="checkbox" id="mobile-view-toggle" style="opacity:0;width:0;height:0;position:absolute;" onchange="toggleMobileView(this)">
+                  <span id="mobile-view-slider" style="position:absolute;inset:0;background:var(--cream-darker);border-radius:26px;transition:background 0.25s;"></span>
+                  <span id="mobile-view-knob" style="position:absolute;top:3px;left:3px;width:20px;height:20px;background:white;border-radius:50%;transition:transform 0.25s;box-shadow:0 1px 4px rgba(0,0,0,0.2);"></span>
+                </label>
+              </div>
+              <div id="mobile-view-status" style="font-size:11px;color:var(--text-light);margin-top:8px;">Status: <strong>Desktop View</strong></div>
+            </div>
+
+            <button class="btn btn-primary" style="margin-top:20px;" onclick="showToast('✅ Settings saved!')">Save Changes</button>
           </div>
         </div>
         <div class="card">
@@ -1510,6 +1527,46 @@
   }
 
   renderCalendar();
+
+  // MOBILE VIEW TOGGLE
+  (function initMobileToggle() {
+    const enabled = {{ \Illuminate\Support\Facades\Cache::get('mobile_view_enabled', false) ? 'true' : 'false' }};
+    const toggle = document.getElementById('mobile-view-toggle');
+    const slider = document.getElementById('mobile-view-slider');
+    const knob   = document.getElementById('mobile-view-knob');
+    const status = document.getElementById('mobile-view-status');
+    if (enabled) {
+      toggle.checked = true;
+      slider.style.background = 'var(--brown)';
+      knob.style.transform = 'translateX(22px)';
+      status.innerHTML = 'Status: <strong style="color:var(--green)">Mobile View Active</strong>';
+    }
+  })();
+
+  function toggleMobileView(checkbox) {
+    const slider = document.getElementById('mobile-view-slider');
+    const knob   = document.getElementById('mobile-view-knob');
+    const status = document.getElementById('mobile-view-status');
+    const enabled = checkbox.checked;
+
+    slider.style.background = enabled ? 'var(--brown)' : 'var(--cream-darker)';
+    knob.style.transform = enabled ? 'translateX(22px)' : 'translateX(0)';
+    status.innerHTML = enabled
+      ? 'Status: <strong style="color:var(--green)">Mobile View Active</strong>'
+      : 'Status: <strong>Desktop View</strong>';
+
+    fetch('{{ route("admin.toggle-mobile-view") }}', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+      },
+      body: JSON.stringify({ enabled: enabled })
+    })
+    .then(r => r.json())
+    .then(() => showToast(enabled ? '📱 Mobile view enabled!' : '🖥️ Desktop view enabled!'))
+    .catch(() => showToast('❌ Failed to update view mode'));
+  }
 </script>
 </body>
 </html>

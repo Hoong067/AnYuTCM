@@ -1,8 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Cache;
 
 Route::get('/', function () {
+    if (Cache::get('mobile_view_enabled', false)) {
+        return view('homepagemobileView');
+    }
     return view('homePage');
 })->name('home');
 
@@ -30,3 +34,9 @@ Route::get('/admin/login', function () {
 Route::get('/admin/dashboard', function () {
     return view('admin.adminPage');
 })->name('admin.dashboard');
+
+Route::post('/admin/toggle-mobile-view', function () {
+    $enabled = request()->boolean('enabled');
+    Cache::forever('mobile_view_enabled', $enabled);
+    return response()->json(['success' => true, 'enabled' => $enabled]);
+})->name('admin.toggle-mobile-view');

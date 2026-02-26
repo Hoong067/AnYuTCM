@@ -26,6 +26,11 @@ Route::get('/about', function () {
     return view('aboutPage');
 })->name('about');
 
+// Mobile pages
+Route::get('/mobile/bookings', fn() => view('bookingpagemobileView'))->name('mobile.bookings');
+Route::get('/mobile/services', fn() => view('servicespagemobileView'))->name('mobile.services');
+Route::get('/mobile/profile', fn() => view('profilepagemobileView'))->name('mobile.profile');
+
 // Admin
 Route::get('/admin/login', function () {
     return view('admin.adminloginPage');

@@ -601,6 +601,7 @@
     }
 
     .tab-item:active { background: rgba(123,63,26,0.05); }
+    a.tab-item { text-decoration: none; }
 
     .tab-item svg { width: 22px; height: 22px; color: rgba(123,63,26,0.35); }
     .tab-item .tab-label { font-size: 10px; color: rgba(123,63,26,0.4); font-weight: 500; letter-spacing: 0.3px; }
@@ -1070,18 +1071,18 @@
 
 <!-- BOTTOM NAV -->
 <nav class="bottom-nav">
-  <div class="tab-item active" onclick="setTab(this)">
+  <a class="tab-item active" href="{{ route('home') }}">
     <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955a1.126 1.126 0 011.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/>
     </svg>
     <span class="tab-label">Home</span>
-  </div>
-  <div class="tab-item" onclick="setTab(this)">
+  </a>
+  <a class="tab-item" href="{{ route('mobile.bookings') }}">
     <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"/>
     </svg>
     <span class="tab-label">Bookings</span>
-  </div>
+  </a>
 
   <!-- Centre book button -->
   <div class="tab-book">
@@ -1092,18 +1093,18 @@
     </div>
   </div>
 
-  <div class="tab-item" onclick="setTab(this)">
+  <a class="tab-item" href="{{ route('mobile.services') }}">
     <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5"/>
     </svg>
     <span class="tab-label">Services</span>
-  </div>
-  <div class="tab-item" onclick="setTab(this)">
+  </a>
+  <a class="tab-item" href="{{ route('mobile.profile') }}">
     <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/>
     </svg>
     <span class="tab-label">Profile</span>
-  </div>
+  </a>
 </nav>
 
 <!-- BOOKING SHEET OVERLAY -->
@@ -1197,12 +1198,6 @@
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('date-input').min = today;
   document.getElementById('date-input').value = today;
-
-  // ── Bottom tab switching
-  function setTab(el) {
-    document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-    el.classList.add('active');
-  }
 
   // ── Sheet open/close
   let selectedOutlet = '';
